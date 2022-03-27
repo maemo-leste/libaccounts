@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+includedir=@includedir@
+pluginlibdir=@pluginlibdir@
+
+Name: @PACKAGE_NAME@
+Description: accounts manager library
+Version: @PACKAGE_VERSION@
+Libs: -L@libdir@ -laccounts
+Cflags: -I${includedir}

@@ -1,0 +1,8 @@
+account_item_get_type
+account_plugin_get_type
+account_plugin_loader_get_type
+account_plugin_manager_get_type
+account_service_get_type
+account_edit_context_get_type
+accounts_list_get_type
+account_wizard_context_get_type
