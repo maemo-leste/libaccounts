@@ -46,7 +46,7 @@ typedef struct _AccountEditContextPrivate AccountEditContextPrivate;
   ((AccountEditContextPrivate *) \
    account_edit_context_get_instance_private((AccountEditContext *)(ctx)))
 
-G_DEFINE_TYPE_WITH_PRIVATE(
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(
   AccountEditContext,
   account_edit_context,
   G_TYPE_OBJECT
