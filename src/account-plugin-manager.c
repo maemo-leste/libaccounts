@@ -73,7 +73,7 @@ on_plugin_initialized(AccountPlugin *plugin,
 
   g_object_get(G_OBJECT(plugin),
                "initialized", &initialized,
-               FALSE);
+               NULL);
 
   if (initialized)
   {
