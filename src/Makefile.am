@@ -1,7 +1,8 @@
 lib_LTLIBRARIES = libaccounts.la
 libaccounts_la_CFLAGS = $(LIBACCOUNTS_CFLAGS)
-libaccounts_la_LDFLAGS = $(LIBACCOUNTS_LIBS) -Wl,--no-undefined		\
-	-version-info 1:0:1
+libaccounts_la_LDFLAGS =			\
+	-Wl,--as-needed $(LIBACCOUNTS_LIBS)	\
+	-Wl,--no-undefined -version-info 1:0:1
 
 BUILT_SOURCES = 		\
 	account-marshal.c	\

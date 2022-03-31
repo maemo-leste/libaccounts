@@ -1,0 +1,5 @@
+/usr/lib/*/libaccounts.so
+/usr/lib/*/libaccounts.a
+/usr/include/*
+/usr/lib/*/pkgconfig/*
+
