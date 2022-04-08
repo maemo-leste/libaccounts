@@ -34,6 +34,14 @@ PKG_CHECK_MODULES(LIBACCOUNTS, [hildon-1 libosso dbus-glib-1 gmodule-2.0])
 # Directories setup
 #+++++++++++++++++++
 
+AC_ARG_WITH(accounts_dir, AS_HELP_STRING([--with-accounts-dir=<path>],[Directory for storing accounts plugins]))
+if test -z "$with_accounts_dir" ; then
+    pluginlibdir=$libdir/libaccounts-plugins
+else
+    pluginlibdir=$with_accounts_dir
+fi
+AC_SUBST(pluginlibdir)
+
 AC_OUTPUT([
 	Makefile
 	libaccounts.pc
