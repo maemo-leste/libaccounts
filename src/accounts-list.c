@@ -110,7 +110,7 @@ accounts_list_remove(AccountsList *accounts_list, AccountItem *account_item)
  *
  * Lists all accounts registered in @accounts_list.
  *
- * Returns:(transfer container): a #GList of #AccountItem objects.
+ * Returns:(transfer full): a #GList of #AccountItem objects.
  */
 GList *
 accounts_list_get_all(AccountsList *accounts_list)
