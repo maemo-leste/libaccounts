@@ -42,7 +42,8 @@ enum
   PROP_DISPLAY_NAME,
   PROP_SUPPORTS_AVATAR,
   PROP_ICON,
-  PROP_PLUGIN
+  PROP_PLUGIN,
+  PROP_SERVICE_NAME
 };
 
 static void
@@ -73,6 +74,7 @@ account_service_finalize(GObject *object)
 
   g_free(service->name);
   g_free(service->display_name);
+  g_free(service->service_name);
 
   G_OBJECT_CLASS(account_service_parent_class)->finalize(object);
 }
@@ -126,6 +128,12 @@ account_service_set_property(GObject *object, guint property_id,
 
       break;
     }
+    case PROP_SERVICE_NAME:
+    {
+      g_free(service->service_name);
+      service->service_name = g_value_dup_string(value);
+      break;
+    }
     default:
     {
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -171,6 +179,11 @@ account_service_get_property(GObject *object, guint property_id, GValue *value,
       g_value_set_object(value, service->plugin);
       break;
     }
+    case PROP_SERVICE_NAME:
+    {
+      g_value_set_string(value, service->service_name);
+      break;
+    }
     default:
     {
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, property_id, pspec);
@@ -205,7 +218,6 @@ account_service_class_init(AccountServiceClass *klass)
       "Display name",
       NULL,
       G_PARAM_WRITABLE | G_PARAM_READABLE));
-
   g_object_class_install_property(
     object_class, PROP_SUPPORTS_AVATAR,
     g_param_spec_boolean(
@@ -230,6 +242,14 @@ account_service_class_init(AccountServiceClass *klass)
       "Plugin",
       ACCOUNT_TYPE_PLUGIN,
       G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE | G_PARAM_READABLE));
+  g_object_class_install_property(
+    object_class, PROP_SERVICE_NAME,
+    g_param_spec_string(
+      "service-name",
+      "Service name",
+      "Service name",
+      NULL,
+      G_PARAM_WRITABLE | G_PARAM_READABLE));
 }
 
 static void

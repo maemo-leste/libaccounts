@@ -53,6 +53,7 @@ struct _AccountService
     GdkPixbuf *icon;
     AccountPlugin *plugin;
     gint priority;
+    gchar *service_name;
 };
 
 GType account_service_get_type (void) G_GNUC_CONST;
