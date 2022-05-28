@@ -63,73 +63,31 @@ struct _AccountPlugin
 
 GType account_plugin_get_type (void) G_GNUC_CONST;
 
-#define ACCOUNT_DEFINE_PLUGIN(TN, t_n, T_P)                     \
-ACCOUNT_DEFINE_TYPE_MODULE_EXTENDED (TN, t_n, T_P, 0, {})       \
-ACCOUNT_PLUGIN_SYMBOLS (t_n)
+#define ACCOUNT_DEFINE_PLUGIN(TN, t_n, T_P) \
+ACCOUNT_DEFINE_TYPE_MODULE_EXTENDED(TN, t_n, T_P, 0, {})
 
-/* this is the same macro as G_DEFINE_DYNAMIC_TYPE_EXTENDED() from glib 2.14 */
-#define ACCOUNT_DEFINE_TYPE_MODULE_EXTENDED(TypeName, type_name, TYPE_PARENT, flags, CODE) \
-                                                                                        \
-static GType    type_name##_type_id = 0;                                                \
-                                                                                        \
-static void     type_name##_init (TypeName *self);                                      \
-static void     type_name##_class_init (TypeName##Class *klass);                        \
-static gpointer type_name##_parent_class = NULL;                                        \
-                                                                                        \
-static void     type_name##_class_intern_init (gpointer klass)                          \
-{                                                                                       \
-  type_name##_parent_class = g_type_class_peek_parent (klass);                          \
-  type_name##_class_init ((TypeName##Class*) klass);                                    \
-}                                                                                       \
-                                                                                        \
-GType                                                                                   \
-type_name##_get_type (void)                                                             \
-{                                                                                       \
-  return type_name##_type_id;                                                           \
-}                                                                                       \
-                                                                                        \
-static GType                                                                            \
-type_name##_register_type (GTypeModule *module)                                         \
-{                                                                                       \
-  if (G_UNLIKELY (type_name##_type_id == 0))                                            \
-  {                                                                                     \
-    static const GTypeInfo g_define_type_info =                                         \
-    {                                                                                   \
-      sizeof (TypeName##Class),                                                         \
-      (GBaseInitFunc) NULL,                                                             \
-      (GBaseFinalizeFunc) NULL,                                                         \
-      (GClassInitFunc) type_name##_class_intern_init,                                   \
-      (GClassFinalizeFunc) NULL,                                                        \
-      NULL,   /* class_data */                                                          \
-      sizeof (TypeName),                                                                \
-      0,      /* n_preallocs */                                                         \
-      (GInstanceInitFunc) type_name##_init,                                             \
-      NULL    /* value_table */                                                         \
-    };                                                                                  \
-                                                                                        \
-    type_name##_type_id =                                                               \
-        g_type_module_register_type (module,                                            \
-                                     TYPE_PARENT,                                       \
-                                     #TypeName,                                         \
-                                     &g_define_type_info,                               \
-                                     (GTypeFlags) flags);                               \
-    { CODE }                                                                            \
-  }                                                                                     \
-                                                                                        \
-  return type_name##_type_id;                                                           \
+#define ACCOUNT_DEFINE_PLUGIN_WITH_PRIVATE(TN, t_n, T_P) \
+ACCOUNT_DEFINE_TYPE_MODULE_EXTENDED(TN, t_n, T_P, 0, G_ADD_PRIVATE_DYNAMIC(TN))
+
+#define ACCOUNT_DEFINE_TYPE_MODULE_EXTENDED(TN, t_n, T_P, flags, CODE) \
+G_DEFINE_DYNAMIC_TYPE_EXTENDED(TN, t_n, T_P, flags, CODE)              \
+ACCOUNT_PLUGIN_SYMBOLS(TN, t_n)
+
+#define ACCOUNT_PLUGIN_SYMBOLS(TN, t_n)                                  \
+G_MODULE_EXPORT void account_plugin_load(AccountPluginLoader *plugin);   \
+void account_plugin_load(AccountPluginLoader *plugin)                    \
+{                                                                        \
+  if (G_UNLIKELY(t_n##_type_id == 0))                                    \
+    t_n##_register_type(G_TYPE_MODULE(plugin));                          \
+  account_plugin_loader_add_type(plugin, t_n##_type_id);                 \
+}                                                                        \
+G_MODULE_EXPORT void account_plugin_unload(AccountPluginLoader *plugin); \
+void account_plugin_unload(AccountPluginLoader *plugin)                  \
+{                                                                        \
+}                                                                        \
+static void t_n##_class_finalize(TN##Class *klass)                       \
+{                                                                        \
 }
-
-#define ACCOUNT_PLUGIN_SYMBOLS(t_n)                                                     \
-G_MODULE_EXPORT void account_plugin_load (AccountPluginLoader *plugin);                       \
-void account_plugin_load (AccountPluginLoader *plugin)                                        \
-{                                                                                       \
-  account_plugin_loader_add_type (plugin, t_n##_register_type(G_TYPE_MODULE (plugin))); \
-}                                                                                       \
-G_MODULE_EXPORT void account_plugin_unload (AccountPluginLoader *plugin);                     \
-void account_plugin_unload (AccountPluginLoader *plugin)                                      \
-{                                                                                       \
-}
-
 
 gboolean account_plugin_setup (AccountPlugin *plugin,
                                AccountsList *accounts_list);
