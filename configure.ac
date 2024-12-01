@@ -1,8 +1,7 @@
-AC_INIT([libaccounts], [4.7])
-AC_CANONICAL_SYSTEM
-AC_CONFIG_MACRO_DIRS([m4])
+AC_INIT([libaccounts],[4.7])
+AC_CANONICAL_TARGET
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 AM_MAINTAINER_MODE
 
@@ -10,9 +9,7 @@ AM_INIT_AUTOMAKE
 
 AC_PROG_CC
 AC_PROG_INSTALL
-AM_PROG_LIBTOOL
-
-AC_HEADER_STDC
+LT_INIT
 
 AC_PATH_X
 AC_PATH_XTRA
@@ -42,10 +39,11 @@ else
 fi
 AC_SUBST(pluginlibdir)
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 	Makefile
 	libaccounts.pc
 	src/Makefile
 	doc/Makefile
 ])
+AC_OUTPUT
 
